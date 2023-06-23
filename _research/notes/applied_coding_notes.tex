@@ -129,10 +129,11 @@ Now, we borrow from the Courant-Friedrichs-Lewy (CFL) necessary (but not suffici
 We note that we also need BCs in order to properly integrate our equation in time, as our time-stepping equation is only valid in the inner region of the grid and not the boundaries defined where $\left(i,j\right)=\left(1,1\right)$.
 To solve this, we impose \emph{absolutely absorbing} boundary conditions given by:
 \begin{equation}
-	T\big\lvert_{\partial B} = 0 \: \text{ for all } \: n,
+	T\left(x,y,t\right)\big\lvert_{\partial B} = 0 \: \text{ for all } \: t,
 	\label{eq:bcs}
 \end{equation}
 for $\partial B$ the boundary of our grid  (i.e., bath) $B$.
+Together with an initial distribution of temperature $T\left(x,y,0\right) = T_0\left(x,y\right)$, we have homogeneous \emph{Dirichlet} BCs.
 Intuitively, this is the physical scenario in which our bath of liquid has sidewalls that absorb all heat that comes into contact with them, removing it from the bath.
 With Eqs. \eqref{eq:timestepping}, \eqref{eq:deltat}, and \eqref{eq:bcs} we can solve Eq. \eqref{eq:diffusion}, and thus we are now ready to translate all of this into code.
 
