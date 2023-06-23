@@ -201,4 +201,12 @@ if __name__ == "__main__":
     # save ::
     anim.save("plots/diffusion.gif")
 
+# ---------------------------------------------------------
+# lastly, we will add, commit, and push our work to our new 
+# remote branch with:
+#   $ git add .
+#   $ git commit -m "adding in 2d_diffusion.py"
+#   $ git push origin main
+# and with that, we have completed our project!
+# ---------------------------------------------------------
 # =========================================================

@@ -118,13 +118,15 @@ If we now apply the forward, first-order finite difference for the time derivati
 	T_{i,j}^{n+1} = \frac{D \Delta t}{\left(\Delta x\right)^2} \left(T_{i+1,j}^n + T_{i,j+1}^n + T_{i-1,j}^n + T_{i,j-1}^n - 4T_{i,j}^n\right).
 	\label{eq:timestepping}
 \end{equation}
-We call this an \emph{explicit} scheme as we are only time-stepping forward and only note now that this is an unstable scheme in some cases and more stable scheme exists which can be seen from a formal stability analysis which we leave for a more comprehensive numerics course.
-Now, we borrow from the Courant-Friedrichs-Lewy (CFL) neccessary (but not sufficient) condition that the stability of the Diffusion Equation is given for a time step $\Delta t$ as:
+We call this an \emph{explicit} scheme as we are only time-stepping forward. 
+While outside the scope of this class, it is important to note now that this scheme can be, in some cases, numerically unstable, which for our purposes means that the numerical approximation diverges from the analytical solution. 
+This can be seen from a formal stability analysis which we leave for a more comprehensive numerics course, but it is worthwhile to note that more stable schema exist, such as \emph{implicit} (backward difference) or \emph{Crank-Nicolson} (averaged forward-backward difference) schema. \par
+Now, we borrow from the Courant-Friedrichs-Lewy (CFL) necessary (but not sufficient) condition that the stability of the Diffusion Equation is given for a time step $\Delta t$ as:
 \begin{equation}
 	\Delta t \le \frac{\left(\Delta x\right)^2}{2D}.
 	\label{eq:deltat}
 \end{equation}
-We note that we also need BCs in order to properly integrate our equation in time, as our time-stepping equation is only value in the inner region of the grid and not the boundaries defined where $\left(i,j\right)=\left(1,1\right)$.
+We note that we also need BCs in order to properly integrate our equation in time, as our time-stepping equation is only valid in the inner region of the grid and not the boundaries defined where $\left(i,j\right)=\left(1,1\right)$.
 To solve this, we impose \emph{absolutely absorbing} boundary conditions given by:
 \begin{equation}
 	T\big\lvert_{\partial B} = 0 \: \text{ for all } \: n,
