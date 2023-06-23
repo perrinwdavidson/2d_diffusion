@@ -1,0 +1,4 @@
+name: 2d_diffusion
+dependencies:
+  - numpy
+  - matplotlib

@@ -1,0 +1,140 @@
+% =========================================================
+% applied_examples_notes
+% ---------------------------------------------------------
+% purpose :: 
+% date :: 11.02.23
+% author :: perrin w. davidson
+% contact :: perrinwdavidson@gmail.com
+% =========================================================
+% ---------------------------------------------------------
+% set document class ::
+\documentclass[11pt]{article}
+
+% packages ::
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+% ---------------------------------------------------------
+% begin document ::
+\begin{document}
+
+% set title ::
+\title{Applied Coding}
+
+% information about authors ::
+\author{Perrin W. Davidson}
+
+% set date ::
+\date{WHOI Summer Math Review 2023}
+
+% make title ::
+\maketitle
+
+% ---------------------------------------------------------
+\section*{Introduction}
+
+The purpose of this class is to provide a beginning-to-end road map to solving an example applicable to oceanographic research.
+We will work through the process of creating a GitHub repository for our project, setting up our working environment, coding up a solution to an example problem, and keeping track of our progress with Git. 
+Additionally, we will work through all of the background theory to gain a physical understanding of the problem so that we can connect that to the coding principles that we will apply in our solution.
+Importantly, we assume only an understanding of multivariate calculus to begin.
+Let's introduce the problem now.
+
+\section*{The Problem: the 2D Diffusion Equation}
+
+We will be working with the 2D Diffusion Equation, also called the Heat Equation, and for good reason.
+We can think of this equation as describing the change in the distribution of $T$ temperature and it's gradient in a bath where there is no flow (i.e., advection).
+The diffusion, described by Fick's Law, essentially smooths out any gradients that exist within the bath until the bath reaches an equilibrium.
+Intuitively, this is to say that the temperature in the bath will move from high temperatures to low temperatures until there are no gradients existing within the bath.
+Mathematically, we can describe this with a second-order, homogeneous partial differential equation:
+\begin{equation}
+	\partial_t T = D\Delta T,
+	\label{eq:diffusion}
+\end{equation}
+where we define $D$ as the diffusivity of  $T$ and the Laplacian $\Delta$ as:
+\begin{equation}
+	\Delta = \nabla ^2 = \partial_x + \partial_y.
+\end{equation}
+We can solve this equation analytically, that is find a closed form solution with the appropriate boundary conditions (BCs).
+However, that is not the purpose of this class.
+Go to the Partial Differential Equations (PDEs) class to get a handle on those tools!
+Instead, our problem now is to give an initial distribution for $T$ and see how it evolves, numerically, in space and time within our domain of interest.
+So, do we could about translating this problem into code and thus into a solution? 
+Let's go about providing an answer now. 
+
+\section*{The Solution: Finite Difference Methods}
+
+\subsection*{Deriving the Finite Difference}
+We start by considering some ``nice'' function $f: \mathbb{R} \to \mathbb{R}$, i.e., it is at least  $C^\infty$ (continuously differentiable in some domain of $x \in U \subset \mathbb{R}$ for all derivative orders $k \in \mathbb{R}_+ \cup \{\infty\}$).
+Next, we recall from Taylor's Theorem the Taylor Expansion of a function $f$ about points $\pm h$ as:
+\begin{equation}
+	f\left(x\pm h\right) = \sum_{n=0}^\infty f^{\left(n\right)}\left(x\right)\frac{\left(\pm h\right)^n}{n!}.
+	\label{eq:taylor}
+\end{equation}
+If we expand out to first-order (i.e., $n=1$) about $x+h$, we get:
+\begin{equation}
+	f\left(x + h\right) \simeq f\left(x\right) + f'\left(x\right)h + \mathcal{O}\left(x^2\right).
+\end{equation}
+Rearranging the terms, we get
+\begin{equation}
+	f'\left(x\right) \simeq \frac{f\left(x+h\right) - f\left(x\right)}{h},
+	\label{eq:first}
+\end{equation}
+where we have assumed that the remainder is small, that is $\mathcal{O}\left(x^2\right) \ll 1$.
+We call this a \emph{forward, first-order finite difference}.
+Now, if we expand to second-order about $x \pm h$, we get:
+\begin{equation}
+	f\left(x\pm h\right) \simeq f\left(x\right) \pm f'\left(x\right)h + f''\left(x\right) \frac{h^2}{2} + \mathcal{O}\left(x^3\right),
+\end{equation}
+which, now summing both expansions and rearranging, gives:
+\begin{equation}
+	f''\left(x\right) \simeq \frac{f\left(x + h \right) - 2f\left(x\right) + f\left(x - h\right)}{h^2}.
+	\label{eq:second}
+\end{equation}
+We call this a \emph {centred, second-order finite difference}, where we have again assumed that the remainder (or the error in the approximation) is small. 
+As a sanity-check, let's recall our definition of a derivative from Real Analysis:
+\begin{equation}
+	f'\left(x\right) = \lim_{h\to 0} \frac{f\left(x+h\right) - f\left(x\right)}{h}.
+\end{equation}
+We note that this resembles, incoincidentally, our approximation of the first derivative.
+
+\subsection*{Applying the Finite Difference}
+
+Let's now say that we are working on a 2-dimensional discrete space $B$ with uniform grid spacing $\Delta = \Delta x = \Delta y$ and uniform time steps $\Delta t$.
+Let's further say that we index $\left(x,y,t\right)$ with $\left(i,j, n\right)$.
+From here, for $f = T$ for temperature, we introduce the notation for the temperature at gridpoint $\left(i,j,n\right)$ as:
+ \begin{equation}
+	T_{i,j}^n.
+\end{equation}
+If we now apply the forward, first-order finite difference for the time derivative of Eq. \eqref{eq:diffusion} for $h = \Delta t$ and the centred, second-order finite difference to the spatial derivative for $h = \Delta$, we get:
+\begin{equation}
+	T_{i,j}^{n+1} = \frac{D \Delta t}{\left(\Delta x\right)^2} \left(T_{i+1,j}^n + T_{i,j+1}^n + T_{i-1,j}^n + T_{i,j-1}^n - 4T_{i,j}^n\right).
+	\label{eq:timestepping}
+\end{equation}
+We call this an \emph{explicit} scheme as we are only time-stepping forward and only note now that this is an unstable scheme in some cases and more stable scheme exists which can be seen from a formal stability analysis which we leave for a more comprehensive numerics course.
+Now, we borrow from the Courant-Friedrichs-Lewy (CFL) neccessary (but not sufficient) condition that the stability of the Diffusion Equation is given for a time step $\Delta t$ as:
+\begin{equation}
+	\Delta t \le \frac{\left(\Delta x\right)^2}{2D}.
+	\label{eq:deltat}
+\end{equation}
+We note that we also need BCs in order to properly integrate our equation in time, as our time-stepping equation is only value in the inner region of the grid and not the boundaries defined where $\left(i,j\right)=\left(1,1\right)$.
+To solve this, we impose \emph{absolutely absorbing} boundary conditions given by:
+\begin{equation}
+	T\big\lvert_{\partial B} = 0 \: \text{ for all } \: n,
+	\label{eq:bcs}
+\end{equation}
+for $\partial B$ the boundary of our grid  (i.e., bath) $B$.
+Intuitively, this is the physical scenario in which our bath of liquid has sidewalls that absorb all heat that comes into contact with them, removing it from the bath.
+With Eqs. \eqref{eq:timestepping}, \eqref{eq:deltat}, and \eqref{eq:bcs} we can solve Eq. \eqref{eq:diffusion}, and thus we are now ready to translate all of this into code.
+
+% ---------------------------------------------------------
+\end{document}
+
+% =========================================================
