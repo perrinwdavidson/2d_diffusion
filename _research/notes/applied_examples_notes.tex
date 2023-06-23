@@ -72,7 +72,7 @@ Let's go about providing an answer now.
 \section*{The Solution: Finite Difference Methods}
 
 \subsection*{Deriving the Finite Difference}
-We start by considering some ``nice'' function $f: \mathbb{R} \to \mathbb{R}$, i.e., it is at least  $C^\infty$ (continuously differentiable in some domain of $x \in U \subset \mathbb{R}$ for all derivative orders $k \in \mathbb{R}_+ \cup \{\infty\}$).
+We start by considering some ``nice'' function $f: \mathbb{R} \to \mathbb{R}$, i.e., it is at least  $C^\infty$, or differentiable for all degrees of differentiation.
 Next, we recall from Taylor's Theorem the Taylor Expansion of a function $f$ about points $\pm h$ as:
 \begin{equation}
 	f\left(x\pm h\right) = \sum_{n=0}^\infty f^{\left(n\right)}\left(x\right)\frac{\left(\pm h\right)^n}{n!}.
@@ -113,9 +113,9 @@ From here, for $f = T$ for temperature, we introduce the notation for the temper
  \begin{equation}
 	T_{i,j}^n.
 \end{equation}
-If we now apply the forward, first-order finite difference for the time derivative of Eq. \eqref{eq:diffusion} for $h = \Delta t$ and the centred, second-order finite difference to the spatial derivative for $h = \Delta$, we get:
+If we now apply the forward, first-order finite difference for the time derivative of Eq. \eqref{eq:diffusion} for $h = \Delta t$ and the centred, second-order finite difference to the spatial partial derivatives for $h = \Delta$ and $x \to  x, y$, we get:
 \begin{equation}
-	T_{i,j}^{n+1} = \frac{D \Delta t}{\left(\Delta x\right)^2} \left(T_{i+1,j}^n + T_{i,j+1}^n + T_{i-1,j}^n + T_{i,j-1}^n - 4T_{i,j}^n\right).
+	T_{i,j}^{n+1} = \frac{D \Delta t}{\Delta^2} \left(T_{i+1,j}^n + T_{i,j+1}^n + T_{i-1,j}^n + T_{i,j-1}^n - 4T_{i,j}^n\right) + T_{i,j}^n.
 	\label{eq:timestepping}
 \end{equation}
 We call this an \emph{explicit} scheme as we are only time-stepping forward. 
@@ -123,7 +123,7 @@ While outside the scope of this class, it is important to note now that this sch
 This can be seen from a formal stability analysis which we leave for a more comprehensive numerics course, but it is worthwhile to note that more stable schema exist, such as \emph{implicit} (backward difference) or \emph{Crank-Nicolson} (averaged forward-backward difference) schema. \par
 Now, we borrow from the Courant-Friedrichs-Lewy (CFL) necessary (but not sufficient) condition that the stability of the Diffusion Equation is given for a time step $\Delta t$ as:
 \begin{equation}
-	\Delta t \le \frac{\left(\Delta x\right)^2}{2D}.
+	\Delta t \le \frac{\Delta ^2}{2D}.
 	\label{eq:deltat}
 \end{equation}
 We note that we also need BCs in order to properly integrate our equation in time, as our time-stepping equation is only valid in the inner region of the grid and not the boundaries defined where $\left(i,j\right)=\left(1,1\right)$.
