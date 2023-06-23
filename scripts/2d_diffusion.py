@@ -22,11 +22,23 @@
 #   $ gh repo create 2d_diffusion --private --source=. --remote=origin
 # where here we are making a github repo named 2d_diffusion
 # that is private from the entire directory with a remote branch
-# named origin. this should do the trick!
-#   now, before we load the packages, we want to create a virtual
+# named origin. this should do the trick! note that you might
+# need to download the cli for github with:
+#   $ brew install gh
+# and also maybe homebrew with:
+#   $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# which is a great package manager for mac. follow the prompts with answers:
+#   - GitHub.com
+#   - HTTPS
+#   - Yes
+#   - Login with a web browser
+# lastly, we will push our directory from the local branch main
+# to our remote repository origin/main with:
+#   $ git push origin main
+# next, before we load the packages, we want to create a virtual
 # environment with which to code in. i am using python, for
 # which i use anaconda to manage my packages and distributions
-# of python. i will create a new enviromment from a .yml file with:
+# of python. i will create a new environment from a .yml file with:
 #   $ conda env create -f src/environment.yml
 # where i have specified the environment name and packages needed
 # within the .yml file. then, i will activate the environment with:
