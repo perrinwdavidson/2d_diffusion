@@ -73,32 +73,32 @@ Let's go about providing an answer now.
 
 \subsection*{Deriving the Finite Difference}
 We start by considering some ``nice'' function $f: \mathbb{R} \to \mathbb{R}$, i.e., it is $C^\infty$ or differentiable for all degrees of differentiation.
-Next, we recall from Taylor's Theorem the Taylor Expansion of a function $f$ about points $\pm h$ as:
+Next, we recall from Taylor's Theorem the Taylor Expansion of a function $f$ about points $x = \pm h$ as:
 \begin{equation}
 	f\left(x\pm h\right) = \sum_{n=0}^\infty f^{\left(n\right)}\left(x\right)\frac{\left(\pm h\right)^n}{n!}.
 	\label{eq:taylor}
 \end{equation}
 If we expand out to first-order (i.e., $n=1$) about $x+h$, we get:
 \begin{equation}
-	f\left(x + h\right) \simeq f\left(x\right) + f'\left(x\right)h + \mathcal{O}\left(x^2\right).
+	f\left(x + h\right) \simeq f\left(x\right) + f'\left(x\right)h + \mathcal{O}\left(h^2\right).
 \end{equation}
 Rearranging the terms, we get
 \begin{equation}
-	f'\left(x\right) \simeq \frac{f\left(x+h\right) - f\left(x\right)}{h},
+	f'\left(x\right) \simeq \frac{f\left(x+h\right) - f\left(x\right)}{h} + \mathcal{O}\left(h\right),
 	\label{eq:first}
 \end{equation}
-where we have assumed that the remainder is small, that is $\mathcal{O}\left(x^2\right) \ll 1$.
-We call this a \emph{forward, first-order finite difference}.
-Now, if we expand to second-order about $x \pm h$, we get:
+where we have assumed that the remainder is small, that is $\mathcal{O}\left(h\right) \ll 1$.
+We call this a \emph{forward finite difference}.
+Now, if we expand to second-order about $x = \pm h$, we get:
 \begin{equation}
-	f\left(x\pm h\right) \simeq f\left(x\right) \pm f'\left(x\right)h + f''\left(x\right) \frac{h^2}{2} + \mathcal{O}\left(x^3\right),
+	f\left(x\pm h\right) \simeq f\left(x\right) \pm f'\left(x\right)h + f''\left(x\right) \frac{h^2}{2} + \mathcal{O}\left(h^3\right),
 \end{equation}
 which, now summing both expansions and rearranging, gives:
 \begin{equation}
-	f''\left(x\right) \simeq \frac{f\left(x + h \right) - 2f\left(x\right) + f\left(x - h\right)}{h^2}.
+	f''\left(x\right) \simeq \frac{f\left(x + h \right) - 2f\left(x\right) + f\left(x - h\right)}{h^2} + \mathcal{O}\left(h\right).
 	\label{eq:second}
 \end{equation}
-We call this a \emph {centred, second-order finite difference}, where we have again assumed that the remainder (or the error in the approximation) is small. 
+We call this a \emph {centred finite difference}, where we have again assumed that the remainder $\mathcal{O} \ll 1$, or the error in the approximation is small. 
 As a sanity-check, let's recall our definition of a derivative from Real Analysis:
 \begin{equation}
 	f'\left(x\right) = \lim_{h\to 0} \frac{f\left(x+h\right) - f\left(x\right)}{h}.
